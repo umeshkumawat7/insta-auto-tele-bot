@@ -34,6 +34,19 @@ async def startup_event():
     os.makedirs("downloads", exist_ok=True)
     logger.info("✅ Downloads directory ready")
 
+    # Automatically set Telegram webhook if running on Render
+    render_url = os.getenv("RENDER_EXTERNAL_URL")
+    bot_token = os.getenv("BOT_TOKEN")
+    if render_url and bot_token:
+        webhook_url = f"{render_url}/webhook"
+        telegram_api = f"https://api.telegram.org/bot{bot_token}/setWebhook"
+        try:
+            import requests
+            r = requests.post(telegram_api, json={"url": webhook_url})
+            logger.info(f"🌐 Webhook registered: {r.json()}")
+        except Exception as e:
+            logger.error(f"❌ Failed to register webhook: {e}")
+
 
 @app.post("/webhook")
 async def webhook(data: dict, background_tasks: BackgroundTasks):
