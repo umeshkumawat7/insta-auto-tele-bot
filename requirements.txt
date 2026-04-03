@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+requests
+python-dotenv
+psycopg2-binary
+sqlalchemy
+python-multipart
+python-magic
+Pillow
+cloudinary
+yt-dlp
