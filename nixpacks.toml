@@ -1,2 +1,5 @@
 [phases.setup]
-aptPkgs = ["ffmpeg", "libmagic1"]
+aptPkgs = ["ffmpeg", "libmagic1", "libpq-dev"]
+
+[start]
+cmd = "uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1"
