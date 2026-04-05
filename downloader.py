@@ -34,15 +34,37 @@ def download_from_url(url: str, dest_dir: str = "downloads") -> str:
             import yt_dlp
             
             # Options to get the best video and save it to the dest_dir
+            cookies_path = os.getenv("INSTAGRAM_COOKIES_FILE", "cookies.txt")
+
             ydl_opts = {
                 'outtmpl': os.path.join(dest_dir, '%(id)s.%(ext)s'),
-                'format': 'best',
+                'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+                'merge_output_format': 'mp4',
+                'postprocessors': [{
+                    'key': 'FFmpegVideoConvertor',
+                    'preferedformat': 'mp4',
+                }],
                 'quiet': True,
                 'no_warnings': True,
+                'http_headers': {
+                    'User-Agent': (
+                        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                        'AppleWebKit/537.36 (KHTML, like Gecko) '
+                        'Chrome/120.0.0.0 Safari/537.36'
+                    ),
+                },
             }
+
+            if os.path.exists(cookies_path):
+                ydl_opts['cookiefile'] = cookies_path
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url, download=True)
                 downloaded_file = ydl.prepare_filename(info)
+                base = os.path.splitext(downloaded_file)[0]
+                for ext in ['.mp4', '.mkv', '.webm', '.mov']:
+                    candidate = base + ext
+                    if os.path.exists(candidate):
+                        return candidate
                 return downloaded_file
         except Exception as e:
             raise Exception(f"yt-dlp download failed: {str(e)}")

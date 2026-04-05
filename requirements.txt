@@ -8,4 +8,4 @@ python-multipart
 python-magic
 Pillow
 cloudinary
-yt-dlp
+yt-dlp>=2026.3.17

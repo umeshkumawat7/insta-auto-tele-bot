@@ -92,9 +92,9 @@ def validate_for_instagram(path: str, post_type: str) -> None:
     elif post_type in ["VIDEO", "REELS"]:
         try:
             mime = magic.from_file(path, mime=True)
-            valid_format = (mime == 'video/mp4' or mime == 'application/mp4')
+            valid_format = mime in ('video/mp4', 'application/mp4', 'video/quicktime', 'video/x-m4v')
         except:
-            valid_format = (ext == 'mp4')
+            valid_format = ext in ('mp4', 'mov', 'm4v')
             
         if not valid_format:
             raise ValueError("Video must be MP4 format")
@@ -122,9 +122,9 @@ def validate_for_instagram(path: str, post_type: str) -> None:
         elif is_video(path):
             try:
                 mime = magic.from_file(path, mime=True)
-                valid_format = (mime == 'video/mp4' or mime == 'application/mp4')
+                valid_format = mime in ('video/mp4', 'application/mp4', 'video/quicktime', 'video/x-m4v')
             except:
-                valid_format = (ext == 'mp4')
+                valid_format = ext in ('mp4', 'mov', 'm4v')
                 
             if not valid_format:
                 raise ValueError("Story video must be MP4 format")
@@ -152,9 +152,9 @@ def validate_for_instagram(path: str, post_type: str) -> None:
         elif is_video(path):
             try:
                 mime = magic.from_file(path, mime=True)
-                valid_format = (mime == 'video/mp4' or mime == 'application/mp4')
+                valid_format = mime in ('video/mp4', 'application/mp4', 'video/quicktime', 'video/x-m4v')
             except:
-                valid_format = (ext == 'mp4')
+                valid_format = ext in ('mp4', 'mov', 'm4v')
                 
             if not valid_format:
                 raise ValueError("Carousel video must be MP4 format")
